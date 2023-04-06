@@ -1,4 +1,7 @@
 """
+Author: Cynthia Ukawu
+
+Note
 You have a 2d array where every element has a single singed (popsitive or negative) number
 
 - The height of the array is the number of nested lists -- rows
@@ -25,10 +28,37 @@ So we're getting a list of unique values near a positive number?
 
 Ideas
 * Need to find positive value and iterate from there
+* What if all the values are negative?
+* What if the matrix is 2x2, the smallest matrix would be 2x2 correct?
+* Implement a cache so that values don't get recomputed
+    - replace neighbors = [] with a dictionary. Lookup would be constant time rather than linear
+
+# using recursion
+[
+    [-1✅, -2✅,  -3✅,  -4,   -5],
+    [6,    7✅,   8✅,   9✅,  -10],
+    [11✅, 12✅,  13🚫,  -14,  -15],
+    [16✅, 17🚫,  18,   -19,   -20]
+]
+
+# not using recursion
+if you go up or down a column by i the number of steps you can take left or right should be reduced by i,
+example: if you go down two you can either go left once or right once
+example2: if you go up three, you can either go left zero times or right zero times (if N = 3)
+[
+    [-1✅, -2✅,  -3✅,  -4,   -5],
+    [6⭐️,    7✅,   8✅,   9✅,  -10],
+    [11✅, 12✅,  13✅,  -14,  -15],
+    [16✅, 17✅,  18,   -19,   -20]
+]
+
+[
+        [-1✅,   -2✅,   -3✅,   -4✅,     -5✅],
+        [-6✅,   -7✅,    8⭐️,    -9✅,    -10✅],
+        [-11✅,  -12✅,   -13✅,  -14✅,   -15✅],
+        [-16🚫,    -17✅,    -18✅,  -19✅,  -20🚫]
+]
 """
-
-import time
-
 
 # def bfs_recursive_n_steps(matrix, queue, visited, steps):
 #     if not queue:
@@ -57,15 +87,21 @@ import time
 #     bfs_recursive_n_steps(matrix, queue, visited, steps-1)
 
 
+import time
+
+
 def bfs(matrix, start, steps):
+    if len(start) < 1:
+        return "Empty"
+    else:
+        start = start[0]
     queue = [start]
     visited = set()
     # bfs_recursive_n_steps(matrix, queue, visited, steps)
     neighbors = get_neighbors(matrix, start, steps)
     for element in neighbors:
         visited.add(element)
-    print("start:", start)
-    print("looky", sorted(visited))
+    return sorted(visited)
 
 
 def get_neighbors(matrix, node, steps):
@@ -83,18 +119,18 @@ def get_neighbors(matrix, node, steps):
             neighbors.append((row - i, col))  # Up
             k = steps-i
             while k >= 0:
-                if col-k > 0:
+                if col-k >= 0:
                     neighbors.append((row-i, col - k))  # Left
-                if col+k < cols - 1:
+                if col+k <= cols - 1:
                     neighbors.append((row-i, col + k))  # Right
                 k -= 1
         if row+i <= rows - 1:
             neighbors.append((row + i, col))  # Down
             k = steps-i
             while k >= 0:
-                if col-k > 0:
+                if col-k >= 0:
                     neighbors.append((row + i, col - k))  # Left
-                if col+k < cols - 1:
+                if col+k <= cols - 1:
                     neighbors.append((row + i, col + k))  # Right
                 k -= 1
         # if col-i >= 0:
@@ -120,30 +156,12 @@ test = [
     [16, 17, 18, -19, - 20]
 ]
 
+test2 = [
+        [1, -2, -3, -4, -5],
+        [-6,  -7,   -8,  -9, -10],
+        [-11, -12, -13, -14, -15],
+        [-16, -17, -18, -19, -20]
+]
+
 starting_points = find_positive_values(test)
-bfs(test, starting_points[0], 3)
-
-# print(find_positive_values(test))  # unit test this
-
-"""
-# using recursion
-[
-    [-1✅, -2✅,  -3✅,  -4,   -5],
-    [6,    7✅,   8✅,   9✅,  -10],
-    [11✅, 12✅,  13🚫,  -14,  -15],
-    [16✅, 17🚫,  18,   -19,   -20]
-]
-
-# not using recursion
-if you go up or down a column by i the number of steps you can take left or right should be reduced by i,
-example: if you go down two you can either go left once or right once
-example2: if you go up three, you can either go left zero times or right zero times (if N = 3)
-[
-    [-1✅, -2✅,  -3✅,  -4,   -5],
-    [6,    7✅,   8✅,   9✅,  -10],
-    [11✅, 12✅,  13✅,  -14,  -15],
-    [16✅, 17✅,  18,   -19,   -20]
-]
-
-
-"""
+print(bfs(test, starting_points, 3))
