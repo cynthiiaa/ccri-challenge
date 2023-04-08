@@ -90,54 +90,80 @@ example2: if you go up three, you can either go left zero times or right zero ti
 import time
 
 
-def bfs(matrix, start, steps):
+def search_2d_array(matrix, start, steps):
     if len(start) < 1:
         return "Empty"
-    else:
-        start = start[0]
-    queue = [start]
+
     visited = set()
-    # bfs_recursive_n_steps(matrix, queue, visited, steps)
-    neighbors = get_neighbors(matrix, start, steps)
-    for element in neighbors:
-        visited.add(element)
+    for value in start:
+        neighbors = get_neighbors(matrix, value, steps)
+        visited.update(neighbors.keys())
+    # start = start[0]
+    # neighbors = get_neighbors(matrix, start, steps)
     return sorted(visited)
 
 
 def get_neighbors(matrix, node, steps):
-    neighbors = []
+    neighbors = dict()
     row, col = node[0], node[1]
     rows, cols = len(matrix), len(matrix[0])
 
     for i in range(steps+1):
         if row-i or row+i == row:
             if col-i >= 0:
-                neighbors.append((row, col - i))  # Left
+                # Go Left
+                if (row, col - i) not in neighbors:
+                    neighbors[(row, col - i)] = 1
+                else:
+                    neighbors[(row, col - i)] += 1
             if col+i <= cols - 1:
-                neighbors.append((row, col + i))  # Right
+                # Go Right
+                if (row, col + i) not in neighbors:
+                    neighbors[(row, col + i)] = 1
+                else:
+                    neighbors[(row, col + i)] += 1
         if row-i >= 0:
-            neighbors.append((row - i, col))  # Up
+            # Go Up
+            if (row - i, col) not in neighbors:
+                neighbors[(row - i, col)] = 1
+            else:
+                neighbors[(row - i, col)] += 1
             k = steps-i
             while k >= 0:
                 if col-k >= 0:
-                    neighbors.append((row-i, col - k))  # Left
+                    # Left
+                    if (row-i, col - k) not in neighbors:
+                        neighbors[(row-i, col - k)] = 1
+                    else:
+                        neighbors[(row-i, col - k)] += 1
                 if col+k <= cols - 1:
-                    neighbors.append((row-i, col + k))  # Right
+                    # Right
+                    if (row-i, col + k) not in neighbors:
+                        neighbors[(row-i, col + k)] = 1
+                    else:
+                        neighbors[(row-i, col + k)] += 1
                 k -= 1
         if row+i <= rows - 1:
-            neighbors.append((row + i, col))  # Down
+            # Go Down
+            if (row + i, col) not in neighbors:
+                neighbors[(row + i, col)] = 1
+            else:
+                neighbors[(row + i, col)] += 1
             k = steps-i
             while k >= 0:
                 if col-k >= 0:
-                    neighbors.append((row + i, col - k))  # Left
+                    # Left
+                    if (row + i, col - k) not in neighbors:
+                        neighbors[(row + i, col - k)] = 1
+                    else:
+                        neighbors[(row + i, col - k)] += 1
                 if col+k <= cols - 1:
-                    neighbors.append((row + i, col + k))  # Right
+                    # Right
+                    if (row + i, col + k)not in neighbors:
+                        neighbors[(row + i, col + k)] = 1
+                    else:
+                        neighbors[(row + i, col + k)] += 1
                 k -= 1
-        # if col-i >= 0:
-        #     neighbors.append((row, col - i))  # Left
-        # if col+i <= cols - 1:
-        #     neighbors.append((row, col + i))  # Right
-
     return neighbors
 
 
@@ -151,17 +177,10 @@ def find_positive_values(matrix):
 
 test = [
     [-1, -2, -3, -4, -5],
-    [6,  7,   8,  9, -10],
-    [11, 12, 13, -14, -15],
-    [16, 17, 18, -19, - 20]
-]
-
-test2 = [
-        [1, -2, -3, -4, -5],
-        [-6,  -7,   -8,  -9, -10],
-        [-11, -12, -13, -14, -15],
-        [-16, -17, -18, -19, -20]
+    [-6,  -7, -8,  9, -10],
+    [11, -12, -13, -14, -15],
+    [-16, -17, -18, -19, -20]
 ]
 
 starting_points = find_positive_values(test)
-print(bfs(test, starting_points, 3))
+print(search_2d_array(test, starting_points, 3))
