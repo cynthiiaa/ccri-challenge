@@ -73,8 +73,7 @@ def find_positive_values(matrix):
 
 
 if __name__ == "__main__":
-    # file1 = sys.argv[1]
-    file1 = "resources/arr1.txt"
+    file1 = sys.argv[1]
     arr = []
     steps = 0
     actual_cells = 0
