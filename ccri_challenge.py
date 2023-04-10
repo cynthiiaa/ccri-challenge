@@ -39,11 +39,6 @@ def get_neighbors(matrix, node, steps):
     for i in range(steps+1):
         if i > rows-1:  # takes care of large steps in the vertical direction
             return neighbors
-        if row-i or row+i == row:  # stay on the same row
-            if col-i >= 0:
-                neighbors.append((row, col - i))  # Left
-            if col+i <= len(matrix[i]) - 1:
-                neighbors.append((row, col + i))  # Right
         if row-i >= 0:  # Move up
             k = steps-i
             while k >= 0:
@@ -78,7 +73,8 @@ def find_positive_values(matrix):
 
 
 if __name__ == "__main__":
-    file1 = sys.argv[1]
+    # file1 = sys.argv[1]
+    file1 = "resources/arr1.txt"
     arr = []
     steps = 0
     actual_cells = 0
