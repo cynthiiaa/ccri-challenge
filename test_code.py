@@ -1,6 +1,5 @@
 import pytest
 import ccri_challenge
-import numpy as np
 
 
 @pytest.fixture()
@@ -76,9 +75,9 @@ def jagged_array():
 
 @pytest.fixture()
 def large_array():
-    arr = np.full((11, 11), -1)
-    arr[6, 5] = 1
-    arr[7, 3] = 5
+    arr = [[-1 for i in range(11)] for i in range(11)]
+    arr[6][5] = 1
+    arr[7][3] = 5
     return arr
 
 
