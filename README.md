@@ -60,4 +60,4 @@ See `arr1.txt` for an example on formating.
 
 When running the code in the terminal, pass in the array text file you want to use.
 
-> example: `python3 ccri_challenge.py arr1.txt`
+> example: `python ccri_challenge.py resources/arr1.txt`

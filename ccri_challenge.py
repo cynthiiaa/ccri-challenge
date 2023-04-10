@@ -14,7 +14,6 @@ def search_2d_array(matrix, starting_point, steps):
     steps: number of steps to take
     """
     if len(starting_point) < 1:
-        print("Empty")
         return 0
 
     visited = set()
